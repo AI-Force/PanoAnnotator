@@ -147,14 +147,23 @@ def genLayoutDepthMap(scene, size):
 def genLayoutEdgeMap(scene, size):
 
     edgeMap = np.zeros(size)
-
     sizeT = (size[1],size[0])
+    corners = {}
     for wall in scene.label.getLayoutWalls():
         if wall.planeEquation[3] > 0:
             continue
+
         for edge in wall.edges:
-            color = utils.normal2ManhColor(edge.vector)
-            #color = (1, 1, 1)
+            # color = utils.normal2ManhColor(edge.vector)
+            color = (1, 1, 1)
+
+            for point in edge.gPoints:
+                pos = utils.coords2pos(point.coords, sizeT)
+
+                if pos not in corners:
+                    corners[pos] = 0
+                corners[pos] += 1
+
             for i in range(len(edge.coords)-1):
                 isCross, l, r = utils.pointsCrossPano(edge.sample[i],
                                                     edge.sample[i+1])
@@ -162,16 +171,19 @@ def genLayoutEdgeMap(scene, size):
                     pos1 = utils.coords2pos(edge.coords[i], sizeT)
                     pos2 = utils.coords2pos(edge.coords[i+1], sizeT)
                     utils.imageDrawLine(edgeMap, pos1, pos2, color)
+                    # print("isCross {}, l {}, r {}".format(isCross, pos1, pos2))
                 else:
                     lpos = utils.coords2pos(utils.xyz2coords(l), sizeT)
                     rpos = utils.coords2pos(utils.xyz2coords(r), sizeT)
                     ch = int((lpos[1] + rpos[1])/2)
                     utils.imageDrawLine(edgeMap, lpos, (0,ch), color)
                     utils.imageDrawLine(edgeMap, rpos, (sizeT[0],ch), color)
-        
-    edgeMap = utils.imageDilation(edgeMap, 1)
-    edgeMap = utils.imageGaussianBlur(edgeMap, 2)
-    return edgeMap
+
+    # edgeMap = utils.imageDilation(edgeMap, 5)
+    # edgeMap = utils.imageGaussianBlur(edgeMap, 3)
+    edgeMap = utils.imageDilation(edgeMap, 3)
+    edgeMap = utils.imageGaussianBlur(edgeMap, 4)
+    return edgeMap, corners
 
 
 def genLayoutObj2dMap(scene, size):
@@ -198,5 +210,5 @@ def normal2ManhColor(normal):
         color = (1,0,0)
     elif axis == 2:
         color = (0,1,0)
-    
+
     return color

@@ -5,6 +5,7 @@ import configs.Params as pm
 import configs.User as user
 import utils
 import data
+import os
 
 try:
     to_unicode = unicode
@@ -13,9 +14,16 @@ except NameError:
 
 def saveSceneAsMaps(path, scene):
 
-    edgeMap = utils.genLayoutEdgeMap(scene, pm.layoutMapSize)
+    edgeMap, corners = utils.genLayoutEdgeMap(scene, pm.layoutMapSize)
     utils.saveImage(edgeMap, path + '/label_edge_vp.png')
-    
+
+    file_name = os.path.basename(path)
+    corner_file = os.path.join(path, "{}.txt".format(file_name))
+    with open(corner_file, 'w') as f:
+        print('Write {} corners to  file at: {}'.format(len(corners), corner_file))
+        for corner in corners.keys():
+            f.write('{} {}\n'.format(corner[0], corner[1]))
+
     oMap = utils.genLayoutOMap(scene, pm.layoutMapSize)
     utils.saveImage(oMap, path + '/label_omap.png')
 
@@ -31,7 +39,7 @@ def saveSceneAsMaps(path, scene):
 
 def showLayoutMaps(scene, color=None):
 
-    edgeMap = utils.genLayoutEdgeMap(scene, pm.layoutMapSize)
+    edgeMap, _ = utils.genLayoutEdgeMap(scene, pm.layoutMapSize)
     if color is not None:
         color = utils.imageResize(color, [512, 1024])
         edgeMap = edgeMap * 0.5 + color * 0.5

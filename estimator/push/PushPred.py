@@ -152,7 +152,7 @@ class PushPred(object):
             normalMap = utils.genLayoutNormalMap(self.__scene, self.__size)
             omapMSE = utils.imagesMSE(normalMap, self.__oMapR)
 
-            edgeMap = utils.genLayoutEdgeMap(self.__scene, self.__size)
+            edgeMap, _ = utils.genLayoutEdgeMap(self.__scene, self.__size)
             edgeMap = utils.imageDilation(edgeMap, 1)
             edgeMap = utils.imageGaussianBlur(edgeMap, 2)
             lineMSE = utils.imagesMSE(edgeMap, self.__linesMapR)

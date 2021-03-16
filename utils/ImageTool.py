@@ -64,8 +64,7 @@ def imageDilation(data, rad):
     ans = np.zeros(data.shape, dtype=np.float)
     for i in range(data.shape[2]):
         channel = data[:,:,i]
-        ans[:,:,i] = morphology.dilation(channel, 
-                            morphology.diamond(rad))
+        ans[:,:,i] = morphology.dilation(channel, morphology.diamond(rad))
     return ans
 
 def imageGaussianBlur(data, sigma):
