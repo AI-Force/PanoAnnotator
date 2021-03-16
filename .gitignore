@@ -4,5 +4,5 @@
 
 estimator/depth/models/trained/*
 
-preprocess/matlab/
+preprocess
 
