@@ -13,11 +13,12 @@ except NameError:
     to_unicode = str
 
 def saveSceneAsMaps(path, scene):
+    file_name = os.path.basename(path)
 
     edgeMap, corners = utils.genLayoutEdgeMap(scene, pm.layoutMapSize)
-    utils.saveImage(edgeMap, path + '/label_edge_vp.png')
+    # utils.saveImage(edgeMap, path + '/label_edge_vp.png')
+    utils.saveImage(edgeMap, os.path.join(path, "{}_EM.jpg".format(file_name)))
 
-    file_name = os.path.basename(path)
     corner_file = os.path.join(path, "{}.txt".format(file_name))
     with open(corner_file, 'w') as f:
         print('Write {} corners to  file at: {}'.format(len(corners), corner_file))
