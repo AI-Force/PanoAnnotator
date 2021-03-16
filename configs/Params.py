@@ -6,8 +6,8 @@ class Params(object):
 
     colorFileDefaultName = "color.png"
     depthFileDefaultName = "depth.png"
-    linesFileDefaultName = "None" #"lines.png"
-    omapFileDefaultName = "None" #"omap.png"
+    linesFileDefaultName = "lines.png"#"None" #"lines.png"
+    omapFileDefaultName = "omap.png"#"None" #"omap.png"
 
     #GPU
     isDepthPred = True
