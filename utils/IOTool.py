@@ -13,6 +13,7 @@ except NameError:
     to_unicode = str
 
 def saveSceneAsMaps(path, scene):
+    path = path[:-1]
     file_name = os.path.basename(path)
 
     edgeMap, corners = utils.genLayoutEdgeMap(scene, pm.layoutMapSize)
